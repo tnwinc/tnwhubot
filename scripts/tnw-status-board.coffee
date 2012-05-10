@@ -20,3 +20,32 @@ module.exports = (robot)->
   robot.respond /reload board/i, (msg)->
     pushCmd 'reload_board'
     msg.send 'reload command sent.'
+
+  robot.respond /standup/i, (msg)->
+    length = 10
+    pushCmd 'start_standup', length
+    msg.send "ALL RISE! For #{length} minutes."
+
+  robot.respond /sound (.*)/i, (msg)->
+    url = msg.match[1]
+    pushCmd 'play_sound', url
+
+  robot.respond /callout (.*)/i, (msg)->
+    type = 'text'
+    timeout = 20
+    content = msg.match[1]
+    if content.match /^http(|s):\/\/.*/i
+      type = 'url'
+      timeout = 120
+
+      if content.match /\.(png|gif|jpg|jpeg)$/
+        type = 'image'
+        timeout = 30
+
+    if type == 'text'
+      content = "&#8820;#{content}&#8821;" #msg.user.nick?
+
+    pushCmd 'set_callout',
+      timeout: timeout
+      type: type
+      content: content
