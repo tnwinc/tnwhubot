@@ -1,7 +1,9 @@
 # Commands to drive the status boards via pusher
 #
 # reload board - reloads the status board
-#
+# standup - all rise
+# sound <url> - plays sound on the status board
+# callout <msg> - displays a message or url on the status board
 
 Pusher = require "node-pusher"
 
@@ -43,7 +45,7 @@ module.exports = (robot)->
         timeout = 30
 
     if type == 'text'
-      content = "&#8820;#{content}&#8821;" #msg.user.nick?
+      content = "&#8220;#{content}&#8221;" #msg.user.nick?
 
     pushCmd 'set_callout',
       timeout: timeout
