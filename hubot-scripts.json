@@ -7,5 +7,9 @@
     "haters.coffee",
     "lmgtfy.coffee",
     "spotify.coffee",
-    "xkcd.coffee"
+    "xkcd.coffee",
+    "pivotal.coffee",
+    "pivotalstorylisten.coffee",
+    "tell.coffee",
+    "tweet-content.coffee"
 ]
