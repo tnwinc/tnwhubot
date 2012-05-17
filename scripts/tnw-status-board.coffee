@@ -45,7 +45,7 @@ module.exports = (robot)->
         timeout = 30
 
     if type == 'text'
-      content = "&#8220;#{content}&#8221;" #msg.user.nick?
+      content = "&#8220;#{content}&#8221; #{msg.user.name}"
 
     pushCmd 'set_callout',
       timeout: timeout
