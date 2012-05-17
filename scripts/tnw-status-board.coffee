@@ -45,7 +45,7 @@ module.exports = (robot)->
         timeout = 30
 
     if type == 'text'
-      content = "&#8220;#{content}&#8221; #{msg.user.name}"
+      content = "&#8220;#{content}&#8221; <br />--#{msg.user.name}"
 
     pushCmd 'set_callout',
       timeout: timeout
@@ -55,6 +55,6 @@ module.exports = (robot)->
     msg.send content if type is 'image'
 
   robot.respond /youtube (.*)/i, (msg)->
-    pushCmd 'set_callout', 
+    pushCmd 'set_callout',
       type: 'youtube'
       content: msg.match[1]
