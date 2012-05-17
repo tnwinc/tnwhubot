@@ -47,8 +47,7 @@ module.exports = (robot)->
     ytids = /youtube (.*)/i.exec content
     if ytids[1]?
       type = 'youtube'
-      content = ytids[1] 
-      console.log content
+      content = ytids[1]
 
     if type == 'text'
       content = "&#8220;#{content}&#8221; --#{msg.message.user.name}"
@@ -59,4 +58,3 @@ module.exports = (robot)->
       content: content
 
     msg.send content if type is 'image'
-
