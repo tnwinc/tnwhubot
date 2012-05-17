@@ -51,3 +51,10 @@ module.exports = (robot)->
       timeout: timeout
       type: type
       content: content
+
+    msg.send content if type is 'image'
+
+  robot.respond /youtube (.*)/i, (msg)->
+    pushCmd 'set_callout', 
+      type: 'youtube'
+      content: msg.match[1]
