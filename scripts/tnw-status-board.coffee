@@ -76,7 +76,6 @@ module.exports = (robot)->
       type = 'youtube'
       content = ytids[1]
       timeout = undefined
-      console.log content
 
     if type == 'text'
       content = "&#8220;#{content}&#8221; --#{msg.message.user.name}"
