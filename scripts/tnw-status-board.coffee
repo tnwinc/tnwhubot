@@ -6,6 +6,7 @@
 # callout <msg> - displays a message or url on the status board
 
 Pusher = require "node-pusher"
+Robot = require '/opt/tnwhubot/node_modules/hubot/src/robot.coffee'
 
 pusher = new Pusher
   appId: process.env['PUSHER_APP_ID']
@@ -35,6 +36,7 @@ module.exports = (robot)->
 
     if build.buildResult == 'failure'
       soundToPlay = 'http://soundfxnow.com/soundfx/Sad-Trombone.mp3'
+      robot.receive new Robot.TextMessage user, 'hubot image me fail cat'
 
     pushCmd 'play_sound', soundToPlay
 
@@ -43,8 +45,13 @@ module.exports = (robot)->
     res.end "that tickles:" + process.env.PORT
 
   robot.respond /play/i, (msg)->
-    console.log process.env
-    console.log process.env.PORT
+    user = robot.userForId 'broadcast'
+    user.room = 'hey there'
+    user.type = 'groupchat'
+    
+    robot.receive new Robot.TextMessage user, 'hubot help'
+    console.log 'in play'
+    
 
   robot.respond /reload board/i, (msg)->
     pushCmd 'reload_board'
