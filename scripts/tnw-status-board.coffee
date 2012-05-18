@@ -86,4 +86,3 @@ module.exports = (robot)->
       content: content
 
     msg.send content if type is 'image'
-
