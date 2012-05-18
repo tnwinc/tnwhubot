@@ -30,14 +30,14 @@ module.exports = (robot)->
     user.room = portMap[process.env.PORT]
     user.type = 'groupchat'
     build = req.body.build
-    
+
     soundToPlay = 'http://soundfxnow.com/soundfx/Human-Cheer-SmallCrowd01.mp3'
 
     if build.buildResult == 'failure'
       soundToPlay = 'http://soundfxnow.com/soundfx/Sad-Trombone.mp3'
 
     pushCmd 'play_sound', soundToPlay
-    
+
     robot.send user, "#{build.message} and ran on agent:#{build.agentName}"
 
     res.end "that tickles:" + process.env.PORT
@@ -49,6 +49,12 @@ module.exports = (robot)->
   robot.respond /reload board/i, (msg)->
     pushCmd 'reload_board'
     msg.send 'reload command sent.'
+
+  robot.respond /set (\w+) to (.*)/i, (msg)->
+    pushCmd 'set_url',
+      pane: msg.match[1]
+      url: msg.match[2]
+    msg.send 'url set'
 
   robot.respond /standup/i, (msg)->
     length = 10
