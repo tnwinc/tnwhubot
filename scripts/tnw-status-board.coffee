@@ -19,6 +19,33 @@ pushCmd = (msg_name, contents)->
   pusher.trigger channel, msg_name, contents
 
 module.exports = (robot)->
+  robot.router.post "/hubot/build/", (req, res)->
+    console.log req.body
+    portMap =
+      5558 : 502761
+      5557 : 502760
+      5556 : 502759
+
+    user = robot.userForId 'broadcast'
+    user.room = portMap[process.env.PORT]
+    user.type = 'groupchat'
+    build = req.body.build
+    
+    soundToPlay = 'http://soundfxnow.com/soundfx/Human-Cheer-SmallCrowd01.mp3'
+
+    if build.buildResult == 'failure'
+      soundToPlay = 'http://soundfxnow.com/soundfx/Sad-Trombone.mp3'
+
+    pushCmd 'play_sound', soundToPlay
+    
+    robot.send user, "#{build.message} and ran on agent:#{build.agentName}"
+
+    res.end "that tickles:" + process.env.PORT
+
+  robot.respond /play/i, (msg)->
+    console.log process.env
+    console.log process.env.PORT
+
   robot.respond /reload board/i, (msg)->
     pushCmd 'reload_board'
     msg.send 'reload command sent.'
@@ -47,7 +74,8 @@ module.exports = (robot)->
     ytids = /youtube (.*)/i.exec content
     if ytids[1]?
       type = 'youtube'
-      content = ytids[1] 
+      content = ytids[1]
+      timeout = undefined
       console.log content
 
     if type == 'text'
