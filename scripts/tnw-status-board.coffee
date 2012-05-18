@@ -21,7 +21,6 @@ pushCmd = (msg_name, contents)->
 
 module.exports = (robot)->
   robot.router.post "/hubot/build/", (req, res)->
-    console.log req.body
     portMap =
       5558 : 502761
       5557 : 502760
@@ -84,8 +83,9 @@ module.exports = (robot)->
         type = 'image'
         timeout = 30
 
+
     ytids = /youtube (.*)/i.exec content
-    if ytids[1]?
+    if ytids && ytids[1]
       type = 'youtube'
       content = ytids[1]
       timeout = undefined
