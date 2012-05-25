@@ -34,8 +34,10 @@ module.exports = (robot)->
     soundToPlay = 'http://soundfxnow.com/soundfx/Human-Cheer-SmallCrowd01.mp3'
 
     if build.buildResult == 'failure'
+      failList = ["dog", "cat", "baby", "parenting"]
       soundToPlay = 'http://soundfxnow.com/soundfx/Sad-Trombone.mp3'
-      robot.receive new Robot.TextMessage user, 'hubot image me fail cat'
+      message = 'hubot image me fail ' + failList[Math.floor(Math.random() * failList.length)]
+      robot.receive new Robot.TextMessage user, message
 
     pushCmd 'play_sound', soundToPlay
 
