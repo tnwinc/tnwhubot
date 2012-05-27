@@ -15,19 +15,16 @@ pusher = new Pusher
 
 channel = process.env['PUSHER_CHANNEL']
 
+room = process.env.HUBOT_CAMPFIRE_ROOMS
+
 pushCmd = (msg_name, contents)->
   contents = contents || {}
   pusher.trigger channel, msg_name, contents
 
 module.exports = (robot)->
   robot.router.post "/hubot/build/", (req, res)->
-    portMap =
-      5558 : 502761
-      5557 : 502760
-      5556 : 502759
-
     user = robot.userForId 'broadcast'
-    user.room = portMap[process.env.PORT]
+    user.room = room
     user.type = 'groupchat'
     build = req.body.build
 
