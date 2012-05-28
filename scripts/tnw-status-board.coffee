@@ -22,26 +22,6 @@ pushCmd = (msg_name, contents)->
   pusher.trigger channel, msg_name, contents
 
 module.exports = (robot)->
-  robot.router.post "/hubot/build/", (req, res)->
-    user = robot.userForId 'broadcast'
-    user.room = room
-    user.type = 'groupchat'
-    build = req.body.build
-
-    soundToPlay = 'http://soundfxnow.com/soundfx/Human-Cheer-SmallCrowd01.mp3'
-
-    if build.buildResult == 'failure'
-      failList = ["dog", "cat", "baby"]
-      soundToPlay = 'http://soundfxnow.com/soundfx/Sad-Trombone.mp3'
-      message = 'bing image fail ' + failList[Math.floor(Math.random() * failList.length)]
-      robot.receive new Robot.TextMessage user, message
-
-    pushCmd 'play_sound', soundToPlay
-
-    robot.send user, "#{build.message} and ran on agent:#{build.agentName}"
-
-    res.end "that tickles:" + process.env.PORT
-
   robot.respond /play/i, (msg)->
     user = robot.userForId 'broadcast'
     user.room = 'hey there'
