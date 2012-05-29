@@ -6,7 +6,7 @@
 # callout <msg> - displays a message or url on the status board
 
 Pusher = require "node-pusher"
-Robot = require '/opt/tnwhubot/node_modules/hubot/src/robot.coffee'
+Robot = require('hubot').robot()
 
 pusher = new Pusher
   appId: process.env['PUSHER_APP_ID']
@@ -22,14 +22,13 @@ pushCmd = (msg_name, contents)->
   pusher.trigger channel, msg_name, contents
 
 module.exports = (robot)->
-  robot.respond /play/i, (msg)->
+  robot.hear /!(.*)/i, (msg)->
     user = robot.userForId 'broadcast'
-    user.room = 'hey there'
+    user.room = process.env.HUBOT_ROOM_TO_RECEIVE_TEAM_CITY_BUILD_RESULTS
     user.type = 'groupchat'
-    
-    robot.receive new Robot.TextMessage user, 'hubot help'
-    console.log 'in play'
-    
+    message = "hubot bang #{msg.match[1]}"
+    msg.send message
+    robot.receive new Robot.TextMessage user, message
 
   robot.respond /reload board/i, (msg)->
     pushCmd 'reload_board'

@@ -7,6 +7,7 @@
 
 Bang  = require "bang"
 {split} = require "shellwords"
+Robot = require('hubot').robot()
 
 module.exports = (robot) ->
   robot.respond /bang\s+(.*)/i, (msg) ->
@@ -46,5 +47,6 @@ module.exports = (robot) ->
       result = bang.get key
       if result
         msg.send result
+        robot.receive new Robot.TextMessage msg.user, result
       else
         msg.send "Nothing's been Banged into #{key}."
