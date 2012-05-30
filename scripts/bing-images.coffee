@@ -19,7 +19,7 @@ module.exports = (robot) ->
 imageMe = (msg, query, cb) ->
   msg.http('https://api.datamarket.azure.com/Bing/Search/Image')
     .header("Authorization", "Basic " + new Buffer("#{bingAccountKey}:#{bingAccountKey}").toString('base64'))
-    .query(Query: "'" + query + "'", $format: "json", $top: 50)
+    .query(Query: "'" + query + "'", $format: "json", $top: 25, adult: "'strict'")
     .get() (err, res, body) ->
       try
         images = JSON.parse(body).d.results
