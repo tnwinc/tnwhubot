@@ -26,7 +26,7 @@ module.exports = (robot)->
     user = robot.userForId 'broadcast'
     user.room = process.env.HUBOT_ROOM_TO_RECEIVE_TEAM_CITY_BUILD_RESULTS
     user.type = 'groupchat'
-    message = "hubot bang #{msg.match[1]}"
+    message = "hubot bang \"#{msg.match[1]}\""
     robot.receive new Robot.TextMessage user, message
 
   robot.respond /reload board/i, (msg)->
