@@ -22,7 +22,7 @@ pushCmd = (msg_name, contents)->
   pusher.trigger channel, msg_name, contents
 
 module.exports = (robot)->
-  robot.hear /!(.*)/i, (msg)->
+  robot.hear /^!(.*)/i, (msg)->
     user = robot.userForId 'broadcast'
     user.room = process.env.HUBOT_ROOM_TO_RECEIVE_TEAM_CITY_BUILD_RESULTS
     user.type = 'groupchat'
