@@ -52,7 +52,7 @@ module.exports = (robot)->
     # This is hacked together from watching the traffic
     # from this site: http://www.ispeech.org/text.to.speech
     api_key = '0ab8a27ef947d2b4b1f989bf2a9a6bf2'
-    text = encodeURIComponent msg
+    text = encodeURIComponent msg.match[1]
     voice = 'usenglishfemale'
     url = "http://api.ispeech.org/api/rest?voice=#{voice}&action=convert&apikey=#{api_key}&speed=0&text=#{text}"
     pushCmd 'play_sound', url
