@@ -83,5 +83,3 @@ module.exports = (robot)->
       timeout: timeout
       type: type
       content: content
-
-    msg.send content if type is 'image'
