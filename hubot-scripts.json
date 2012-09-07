@@ -13,5 +13,6 @@
     "pivotal.coffee",
     "pivotalstorylisten.coffee",
     "tell.coffee",
-    "tweet-content.coffee"
+    "tweet-content.coffee",
+	"qa-servers.coffee"
 ]
