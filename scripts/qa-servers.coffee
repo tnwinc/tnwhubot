@@ -12,8 +12,7 @@ servers = [
    "Grouper (Carbon) - #{note}",
    "Catfish (Cobalt) - #{note}",
    "Carp (Platinum) - #{note}",
-   "Trout (Load) - #{note}"
-]
+   "Trout (Load) - #{note}"]
 
 DateFormatter = ->
 	weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']       
@@ -22,18 +21,24 @@ DateFormatter = ->
 		month = 1 + date.getMonth()
 		"#{weekday} @ #{date.getHours()}:#{date.getMinutes()}, #{month}/#{date.getDate()}"
 
-
 ConfirmNotes = (server) ->
+	# save(robot)
 	"Got it. Saved notes for #{server}."
-		
+
+# save = (robot) ->
+	# robot.brain.data.servers = servers
+	
 module.exports = (robot) ->
+    robot.brain.on 'loaded', ->
+		servers = robot.brain.data.servers
+
 
 	# hubot servers
 	robot.respond /servers/i, (msg) ->
 		msg.send ":::  QA Servers  :::\n" + servers.join('\n')
 
 	# hubot What's on <QA server name>?
-	robot.respond /What(?:'s| is) on (\S+[^?])/i, (msg) ->
+	robot.hear /What(?:'s| is) on (\S+[^?])/i, (msg) ->
 		server = msg.match[1].toLowerCase()
 		switch server
 			when "goby" 
@@ -53,7 +58,7 @@ module.exports = (robot) ->
 	robot.respond /deploying ([^\s]+)(.+?)$/i, (msg) ->
 		server = msg.match[1].toLowerCase()
 		note = msg.match[2]
-
+		
 		formatter = new DateFormatter()
 		date = new Date()
 		now = formatter.verbose(date)
