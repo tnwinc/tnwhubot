@@ -1,44 +1,51 @@
 # Description:
-#   Takes freetext notes about what is deployed to a QA server. TODO: Expand team-city-listener script to cover this in a flashier/automatic way; maybe deploy too.  
+#	Takes freetext notes about what is deployed to a QA server. 
+#	TODO: Expand team-city-listener script to cover this in a flashier/automatic way. 
+#
+# Dependencies:
+#	None
+#
+# Configurations:
+#	None
 #
 # Commands:
-#   hubot servers - list QA server, team and notes.
-#   hubot what's on <server> - list a single QA server, team and notes.
-#   hubot deploying <text> <text> - stores notes about deployment.
+#	hubot deploying <server> <text> - stores notes about deployment.
+#	hubot servers - list QA server, team and notes.
+#	what's on <server> - list a single QA server, team and notes.
+#
+# Notes:
+#
+# Author:
+#	mcrow
 
 note ="No notes provided yet."
 servers = [
-   "Goby (Carbon) - #{note}",
-   "Grouper (Carbon) - #{note}",
-   "Catfish (Cobalt) - #{note}",
-   "Carp (Platinum) - #{note}",
-   "Trout (Load) - #{note}"]
+	"Goby (Carbon) - #{note}",
+	"Grouper (Carbon) - #{note}",
+	"Catfish (Cobalt) - #{note}",
+	"Carp (Platinum) - #{note}",
+	"Trout (Load) - #{note}"]
 
 DateFormatter = ->
 	weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']       
 	verbose: (date) ->
 		weekday = weekdays[date.getDay()]
 		month = 1 + date.getMonth()
-		"#{weekday} @ #{date.getHours()}:#{date.getMinutes()}, #{month}/#{date.getDate()}"
+		minutes = date.getMinutes()
+		if minutes < 10 then "0#{minutes}" else "#{minutes}"
+		"#{weekday} @ #{date.getHours()}:#{minutes}, #{month}/#{date.getDate()}"
 
-ConfirmNotes = (server) ->
-	# save(robot)
-	"Got it. Saved notes for #{server}."
-
-# save = (robot) ->
-	# robot.brain.data.servers = servers
-	
 module.exports = (robot) ->
-    robot.brain.on 'loaded', ->
-		servers = robot.brain.data.servers
-
+	robot.brain.on 'loaded', ->
+		robot.brain.data.servers ?= []
+		servers = robot.brain.data.servers ?= []
 
 	# hubot servers
 	robot.respond /servers/i, (msg) ->
 		msg.send ":::  QA Servers  :::\n" + servers.join('\n')
 
 	# hubot What's on <QA server name>?
-	robot.hear /What(?:'s| is) on (\S+[^?])/i, (msg) ->
+	robot.hear /What(?:'s| is|s) on (\S+[^?])/i, (msg) ->
 		server = msg.match[1].toLowerCase()
 		switch server
 			when "goby" 
@@ -55,7 +62,7 @@ module.exports = (robot) ->
 				msg.send "Sorry, I don't recognize a server named #{server}..."
 		
 	# hubot <QA server name> <deploy testing notes>
-	robot.respond /deploying ([^\s]+)(.+?)$/i, (msg) ->
+	robot.respond /deploying ([^\s]+) (.+?)$/i, (msg) ->
 		server = msg.match[1].toLowerCase()
 		note = msg.match[2]
 		
@@ -63,6 +70,10 @@ module.exports = (robot) ->
 		date = new Date()
 		now = formatter.verbose(date)
 
+		ConfirmNotes = (server) ->
+			robot.brain.data.servers = servers
+			"Got it. Saved notes for #{server}."
+		
 		switch server
 			when "goby" 
 				servers[0] = "Goby (Carbon) - #{now} - #{note}"
