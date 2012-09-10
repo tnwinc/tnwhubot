@@ -23,8 +23,9 @@ servers = [
 	"Goby (Carbon) - #{note}",
 	"Grouper (Carbon) - #{note}",
 	"Catfish (Cobalt) - #{note}",
-	"Carp (Platinum) - #{note}",
-	"Trout (Load) - #{note}"]
+	"Barracuda (Platinum) - #{note}",
+	"Trout (Load) - #{note}",
+	"Carp (Open) - #{note}"]
 
 DateFormatter = ->
 	weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']       
@@ -54,10 +55,12 @@ module.exports = (robot) ->
 				msg.send servers[1]
 			when "catfish"
 				msg.send servers[2]
-			when "carp" 
+			when "barracuda"
 				msg.send servers[3]
 			when "trout"
 				msg.send servers[4]
+			when "carp" 
+				msg.send servers[5]
 			else
 				msg.send "Sorry, I don't recognize a server named #{server}..."
 		
@@ -84,11 +87,14 @@ module.exports = (robot) ->
 			when "catfish"
 				servers[2] = "Catfish (Cobalt) - #{now} - #{note}"
 				msg.send ConfirmNotes(server)
-			when "carp" 
-				servers[3] = "Carp (Platinum) - #{now} - #{note}"
+			when "barracuda"
+				servers[3] = "Barracuda (Platinum) - #{now} - #{note}"
 				msg.send ConfirmNotes(server)
 			when "trout"
 				servers[4] = "Trout (Load) - #{now} - #{note}"
+				msg.send ConfirmNotes(server)
+			when "carp" 
+				servers[5] = "Carp (Open) - #{now} - #{note}"
 				msg.send ConfirmNotes(server)
 			else
 				msg.send "Sorry, I don't recognize a server named #{server}..."
