@@ -12,6 +12,7 @@
 #	hubot deploying <server> <text> - stores notes about deployment.
 #	hubot servers - list QA server, team and notes.
 #	what's on <server> - list a single QA server, team and notes.
+#	hubot slap <user> - mIRC trout slap
 #
 # Notes:
 #
@@ -38,8 +39,7 @@ DateFormatter = ->
 
 module.exports = (robot) ->
 	robot.brain.on 'loaded', ->
-		robot.brain.data.servers ?= []
-		servers = robot.brain.data.servers ?= []
+		robot.brain.data.servers ?= servers
 
 	# hubot servers
 	robot.respond /servers/i, (msg) ->
@@ -63,12 +63,12 @@ module.exports = (robot) ->
 				msg.send servers[5]
 			else
 				msg.send "Sorry, I don't recognize a server named #{server}..."
-		
+
 	# hubot <QA server name> <deploy testing notes>
-	robot.respond /deploying ([^\s]+) (.+?)$/i, (msg) ->
+	robot.respond /deploying ([^\w]+) (.+?)$/i, (msg) ->
 		server = msg.match[1].toLowerCase()
 		note = msg.match[2]
-		
+
 		formatter = new DateFormatter()
 		date = new Date()
 		now = formatter.verbose(date)
@@ -76,7 +76,7 @@ module.exports = (robot) ->
 		ConfirmNotes = (server) ->
 			robot.brain.data.servers = servers
 			"Got it. Saved notes for #{server}."
-		
+
 		switch server
 			when "goby" 
 				servers[0] = "Goby (Carbon) - #{now} - #{note}"
@@ -98,3 +98,13 @@ module.exports = (robot) ->
 				msg.send ConfirmNotes(server)
 			else
 				msg.send "Sorry, I don't recognize a server named #{server}..."
+	
+	# hubot slap <UserName> (this is silly, it can be removed)
+	robot.respond /slap\s(.+)/i, (msg) ->
+		slappedUser = msg.match[1].replace(/\s+$/g, "")
+		msg.send "Hubot slaps #{slappedUser} around a bit with a large trout"
+		
+	# TC deploy listener
+	robot.hear /Build (?:\w+) :: qa_(\w+) (?:.+) status of "Running"/i, (msg) ->
+		justDeployedServer = msg.match[1]
+		msg.send "Let me know if #{justDeployedServer} needs a new note by typing: \"hubot deploying #{justDeployedServer} NewNote\""
