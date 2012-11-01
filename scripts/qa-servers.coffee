@@ -95,6 +95,7 @@ module.exports = (robot) ->
 	# hubot slap <UserName> (this is silly, it can be removed)
 	robot.respond /slap\s(.+)/i, (msg) ->
 		slappedUser = msg.match[1].replace(/\s+$/g, "")
+		msg.send "!slap"		
 		msg.send "Hubot slaps #{slappedUser} around a bit with a large trout"
 
 	# TC deploy listener
