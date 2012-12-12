@@ -22,10 +22,10 @@ plugin.parseDate = (fuzzyDateString)->
 
 plugin.save = (robot, vacationDateRange, msg)->
   userOutList = robot.brain.data.outList
-  userVacation = _(userOutList).find (item)-> item.name is msg.user
+  userVacation = _(userOutList).find (item)-> item.name is msg.user.name
   if userVacation is undefined
     userOutList.push
-      name: msg.user
+      name: msg.user.name
       dates: [vacationDateRange.start]
   else
     unless _(userVacation.dates).some( (item)-> (moment item).format('M/D/YY') is (moment vacationDateRange.start).format('M/D/YY'))

@@ -17,7 +17,14 @@ describe 'Parse Date', ->
 
   describe 'when responding', ->
     beforeEach ->
-      @robot.respond.mostRecentCall.args[1]({match:['', '12/12/12'], send: new Spy 'message send'})
+      @robot.respond.mostRecentCall.args[1](
+        match:[
+          '',
+          '12/12/12']
+        send: new Spy 'message send'
+        user:
+          name: 'slacker')
+
     it 'should call parse date', ->
       parseDateArgs = codeUnderTest.parseDate.mostRecentCall.args
       (expect codeUnderTest.parseDate).was.called
@@ -43,7 +50,7 @@ describe 'Parse Date', ->
               outList:[
                 name: 'slacker'
                 dates: [new Date('1/1/12')]]
-            codeUnderTest.save @robot, {start:(new Date '12/12/12')}, {user: 'slacker'}
+            codeUnderTest.save @robot, {start:(new Date '12/12/12')}, {user: {name: 'slacker'}}
 
           it 'should add this date to the user entry', ->
             (expect @robot.brain.data.outList[0]).to.eql
@@ -52,7 +59,7 @@ describe 'Parse Date', ->
 
           describe 'when user\'s vacation date already exists', ->
             beforeEach ->
-              codeUnderTest.save @robot, {start:(new Date '12/12/12')}, {user: 'slacker'}
+              codeUnderTest.save @robot, {start:(new Date '12/12/12')}, {user:{name: 'slacker'}}
             it 'should not add it to the brain', ->
               (expect @robot.brain.data.outList[0].dates.length).to.equal 2
 
@@ -60,7 +67,7 @@ describe 'Parse Date', ->
           beforeEach ->
             @robot.brain.data =
               outList: []
-            codeUnderTest.save @robot, {start: (new Date '12/12/12')}, {user: 'slacker'}
+            codeUnderTest.save @robot, {start: (new Date '12/12/12')}, {user: {name: 'slacker'}}
           it 'should add date to the right user', ->
             (expect @robot.brain.data.outList[0].dates).to.eql [new Date('12/12/12')]
             (expect @robot.brain.data.outList[0].name).to.equal 'slacker'
