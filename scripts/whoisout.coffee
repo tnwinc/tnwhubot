@@ -8,7 +8,11 @@ plugin = (robot)->
   robot.brain.data.outList = [] unless robot.brain.data.outList?
   robot.respond /I am out +(.*)/i, (msg)->
     thisDate = plugin.parseDate msg.match[1]
-    #msg.send returnMessage
+    if thisDate
+      plugin.save robot, thisDate, msg
+      msg.send 'success'
+    else
+      msg.send 'unable to parse date'
 
 plugin.parseDate = (fuzzyDateString)->
   if (@thisDate = (moment fuzzyDateString)).isValid()

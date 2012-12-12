@@ -23,18 +23,18 @@ describe 'Parse Date', ->
       (expect codeUnderTest.parseDate).was.called
       (expect parseDateArgs[0]).to.equal '12/12/12'
 
-      describe 'when parsing date', ->
-        describe 'when date is parsable by ECMA', ->
-          describe 'it is an invalid date', ->
-            beforeEach ->
-              @thisDate = codeUnderTest.parseDate 'this could never be valid'
-            it 'should return a valid date', ->
-              (expect @thisDate).to.be.false
-          describe 'it is a valid date', ->
-            beforeEach ->
-              @thisDate = codeUnderTest.parseDate '12/12/12'
-            it 'should return a valid date', ->
-              (expect @thisDate.start).to.eql new Date('12/12/12')
+    describe 'when parsing date', ->
+      describe 'when date is parsable by ECMA', ->
+        describe 'it is an invalid date', ->
+          beforeEach ->
+            @thisDate = codeUnderTest.parseDate 'this could never be valid'
+          it 'should return a valid date', ->
+            (expect @thisDate).to.be.false
+        describe 'it is a valid date', ->
+          beforeEach ->
+            @thisDate = codeUnderTest.parseDate '12/12/12'
+          it 'should return a valid date', ->
+            (expect @thisDate.start).to.eql new Date('12/12/12')
 
       describe 'when saving date', ->
         describe 'when user\'s entry exists', ->
