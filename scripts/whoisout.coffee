@@ -24,9 +24,9 @@ plugin = (robot)->
     robot.brain.data.outList = [] unless _(robot.brain.data.outList).isArray()
 
   robot.respond /whoisout\s*(.*)/i, (msg)->
-    msg.send (plugin.getTodaysAbsentees robot)
+    msg.send (plugin.getTodaysAbsentees robot, msg.match[1])
 
-  robot.respond /I am out +(.*)/i, (msg)->
+  robot.respond /I will be out +(.*)/i, (msg)->
     thisDate = plugin.parseDate msg.match[1]
     if thisDate
       plugin.save robot, thisDate, msg.message
@@ -51,7 +51,11 @@ plugin.save = (robot, vacationDateRange, msg)->
     unless _(userVacation.dates).some( (item)-> (moment item).format('M/D/YY') is (moment vacationDateRange.start).format('M/D/YY'))
       userVacation.dates.push vacationDateRange.start
 
-plugin.getTodaysAbsentees = (robot)->
-  util.inspect robot.brain.data.outList
-
+plugin.getTodaysAbsentees = (robot, suggestedDate)->
+  if _(robot.brain.data.outList).isArray
+    names = _(robot.brain.data.outList).map (item)->
+      "#{item.name}: \n #{(_(item.dates).map (dt)-> (moment dt).format('M/D/YY')).join '\n'}"
+    names.join '\n'
+  else
+    return "Nobody"
 module.exports = plugin
