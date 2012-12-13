@@ -7,8 +7,7 @@ _ = require 'underscore'
 plugin = (robot)->
   robot.brain.data.outList = [] unless robot.brain.data.outList?
   robot.respond /whoisout +(.*)/i, (msg)->
-    #msg.send (plugin.getTodaysAbsentees robot)
-    msg.send 'Alive and responding'
+    msg.send (plugin.getTodaysAbsentees robot)
 
   robot.respond /I am out +(.*)/i, (msg)->
     thisDate = plugin.parseDate msg.match[1]
