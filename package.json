@@ -21,6 +21,7 @@
     "node-pusher": "0.0.2",
     "xml2js": "0.1.14",
     "moment": "x",
-    "underscore": "x"
+    "underscore": "x",
+    "util": "x"
   }
 }
