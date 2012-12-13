@@ -6,6 +6,9 @@ _ = require 'underscore'
 
 plugin = (robot)->
   robot.brain.data.outList = [] unless robot.brain.data.outList?
+  robot.respond /who is out +(.*)/i, (msg)->
+    msg.send (plugin.getTodaysAbsentees robot)
+
   robot.respond /I am out +(.*)/i, (msg)->
     thisDate = plugin.parseDate msg.match[1]
     if thisDate
@@ -30,5 +33,8 @@ plugin.save = (robot, vacationDateRange, msg)->
   else
     unless _(userVacation.dates).some( (item)-> (moment item).format('M/D/YY') is (moment vacationDateRange.start).format('M/D/YY'))
       userVacation.dates.push vacationDateRange.start
+
+plugin.getTodaysAbsentees = (robot)->
+  robot.brain.data.outList
 
 module.exports = plugin
