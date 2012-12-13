@@ -17,16 +17,19 @@
 
 moment = require 'moment'
 _ = require 'underscore'
-
+util = require 'util'
 plugin = (robot)->
-  robot.brain.data.outList = [] unless robot.brain.data.outList?
-  robot.respond /whoisout +(.*)/i, (msg)->
+
+  robot.brain.on 'loaded', =>
+    robot.brain.data.outList = [] unless _(robot.brain.data.outList).isArray()
+
+  robot.respond /whoisout\s*(.*)/i, (msg)->
     msg.send (plugin.getTodaysAbsentees robot)
 
   robot.respond /I am out +(.*)/i, (msg)->
     thisDate = plugin.parseDate msg.match[1]
     if thisDate
-      plugin.save robot, thisDate, msg
+      plugin.save robot, thisDate, msg.message
       msg.send 'success'
     else
       msg.send 'unable to save date'
@@ -49,9 +52,6 @@ plugin.save = (robot, vacationDateRange, msg)->
       userVacation.dates.push vacationDateRange.start
 
 plugin.getTodaysAbsentees = (robot)->
-  if robot.brain.data.outList is []
-    return 'Nobody'
-  else
-    robot.brain.data.outList
+  util.inspect robot.brain.data.outList
 
 module.exports = plugin

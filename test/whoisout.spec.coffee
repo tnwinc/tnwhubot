@@ -11,6 +11,7 @@ describe 'Parse Date', ->
     @robot = new Spy()
     @robot.brain =
       data:{outList: []}
+      on: (fn)-> fn
     @robot.respond = new Spy()
     codeUnderTest.parseDate = new Spy().andCall codeUnderTest.parseDate
     codeUnderTest @robot
@@ -22,8 +23,9 @@ describe 'Parse Date', ->
           '',
           '12/12/12']
         send: new Spy 'message send'
-        user:
-          name: 'slacker')
+        message:
+          user:
+            name: 'slacker')
 
     it 'should call parse date', ->
       parseDateArgs = codeUnderTest.parseDate.mostRecentCall.args
