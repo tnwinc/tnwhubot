@@ -29,7 +29,7 @@ plugin = (robot)->
       plugin.save robot, thisDate, msg
       msg.send 'success'
     else
-      msg.send 'unable to parse date'
+      msg.send 'unable to save date'
 
 plugin.parseDate = (fuzzyDateString)->
   if (@thisDate = (moment fuzzyDateString)).isValid()
