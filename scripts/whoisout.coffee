@@ -35,6 +35,9 @@ plugin.save = (robot, vacationDateRange, msg)->
       userVacation.dates.push vacationDateRange.start
 
 plugin.getTodaysAbsentees = (robot)->
-  robot.brain.data.outList
+  if robot.brain.data.outList is []
+    return 'Nobody'
+  else
+    robot.brain.data.outList
 
 module.exports = plugin
