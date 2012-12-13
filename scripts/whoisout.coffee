@@ -51,7 +51,7 @@ plugin.save = (robot, vacationDateRange, msg)->
       userVacation.dates.push vacationDateRange.start
 
 plugin.getTodaysAbsentees = (robot, suggestedDate)->
-  if _(robot.brain.data.outList).isArray & robot.brain.data.outList.length > 0
+  if _(robot.brain.data.outList).isArray and robot.brain.data.outList.length > 0
     names = _(robot.brain.data.outList).map (item)->
       "#{item.name}: \n #{(_(item.dates).map (dt)-> (moment dt).format('M/D/YY')).join '\n'}"
     names.join '\n'
