@@ -1,5 +1,19 @@
-# Show/Enter who is out of office
+## Description
+#   Show / Enter who is out of office
 #
+# Dependencies:
+#   "moment": "x"
+#   "underscore": "x"
+#
+# Configuration:
+#
+# Commands:
+#   hubot whoisout [date]
+#
+# Notes:
+#
+# Author:
+#  Contejious
 
 moment = require 'moment'
 _ = require 'underscore'
