@@ -40,10 +40,8 @@ describe 'Parse Date', ->
             {name: 'slacker', dates: [moment().format('M/D/YY')]}
             { name: 'another slacker', dates: ['1/1/14']}]
           @nameList = codeUnderTest.getAbsentees @robot
-
         it 'should show who is out today', ->
           (expect @nameList).to.equal 'slacker'
-
 
     describe 'when parsing date', ->
       describe 'when date is parsable by ECMA', ->

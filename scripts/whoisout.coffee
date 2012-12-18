@@ -50,9 +50,8 @@ plugin.save = (robot, vacationDateRange, msg)->
       userVacation.dates.push vacationDateRange.start
 
 plugin.getAbsentees = (robot, targetDate)->
-  console.log 'calling getAbsentees'
   targetDate = new Date() unless targetDate?
-  if _(robot.brain.data.outList).isArray and robot.brain.data.outList.length > 0
+  if _(robot.brain.data.outList).isArray() and (robot.brain.data.outList.length > 0)
     names = []
     _(robot.brain.data.outList).each (item)->
       if(_(item.dates).some( (dt)-> (moment dt).format('M/D/YY') is (moment targetDate).format('M/D/YY')))
@@ -60,5 +59,7 @@ plugin.getAbsentees = (robot, targetDate)->
     if names.length > 0
       names.join '\n'
     else
-      return "Nobody"
+      return 'Nobody'
+  else
+    return 'Nobody'
 module.exports = plugin
