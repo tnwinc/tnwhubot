@@ -18,18 +18,17 @@
 moment = require 'moment'
 _ = require 'underscore'
 plugin = (robot)->
-
   robot.brain.on 'loaded', =>
-    robot.brain.data.outList = [] unless _(robot.brain.data.outList).isArray()
+    robot.brain.data.outList = []  unless _(robot.brain.data.outList).isArray()
 
-  robot.respond /whoisout\s*(.*)/i, (msg)->
-    msg.send (plugin.getTodaysAbsentees robot, msg.match[1])
+  robot.respond /whoisout/i, (msg)->
+    msg.send (plugin.getAbsentees robot, msg.match[1])
 
   robot.respond /I will be out +(.*)/i, (msg)->
-    thisDate = plugin.parseDate msg.match[1]
+    thisDate = plugin.parseDate msg.match[1]?.trim()
     if thisDate
       plugin.save robot, thisDate, msg.message
-      msg.send 'success'
+      msg.send 'ok'
     else
       msg.send 'unable to save date'
 
@@ -50,11 +49,16 @@ plugin.save = (robot, vacationDateRange, msg)->
     unless _(userVacation.dates).some( (item)-> (moment item).format('M/D/YY') is (moment vacationDateRange.start).format('M/D/YY'))
       userVacation.dates.push vacationDateRange.start
 
-plugin.getTodaysAbsentees = (robot, suggestedDate)->
+plugin.getAbsentees = (robot, targetDate)->
+  console.log 'calling getAbsentees'
+  targetDate = new Date() unless targetDate?
   if _(robot.brain.data.outList).isArray and robot.brain.data.outList.length > 0
-    names = _(robot.brain.data.outList).map (item)->
-      "#{item.name}: \n #{(_(item.dates).map (dt)-> (moment dt).format('M/D/YY')).join '\n'}"
-    names.join '\n'
-  else
-    return "Nobody"
+    names = []
+    _(robot.brain.data.outList).each (item)->
+      if(_(item.dates).some( (dt)-> (moment dt).format('M/D/YY') is (moment targetDate).format('M/D/YY')))
+        names.push item.name
+    if names.length > 0
+      names.join '\n'
+    else
+      return "Nobody"
 module.exports = plugin

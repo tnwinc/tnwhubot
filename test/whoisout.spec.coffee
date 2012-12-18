@@ -1,5 +1,6 @@
 chai = require 'chai'
 expect = chai.expect
+moment = require 'moment'
 
 Spy = require '../lib/spy/spy'
 chai.use require '../lib/spy/spy.chai'
@@ -31,6 +32,18 @@ describe 'Parse Date', ->
       parseDateArgs = codeUnderTest.parseDate.mostRecentCall.args
       (expect codeUnderTest.parseDate).was.called
       (expect parseDateArgs[0]).to.equal '12/12/12'
+
+    describe 'when querying', ->
+      describe 'when target date is not specified', ->
+        beforeEach ->
+          @robot.brain.data.outList = [
+            {name: 'slacker', dates: [moment().format('M/D/YY')]}
+            { name: 'another slacker', dates: ['1/1/14']}]
+          @nameList = codeUnderTest.getAbsentees @robot
+
+        it 'should show who is out today', ->
+          (expect @nameList).to.equal 'slacker'
+
 
     describe 'when parsing date', ->
       describe 'when date is parsable by ECMA', ->
