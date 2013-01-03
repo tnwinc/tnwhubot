@@ -8,7 +8,8 @@
 # Configuration:
 #
 # Commands:
-#   hubot whoisout [date]
+#   hubot I will be out [date]
+#   hubot whoisout
 #
 # Notes:
 #
@@ -41,6 +42,7 @@ plugin.parseDate = (fuzzyDateString)->
 plugin.save = (robot, vacationDateRange, msg)->
   userOutList = robot.brain.data.outList
   userVacation = _(userOutList).find (item)-> item.name is msg.user.name
+
   if userVacation is undefined
     userOutList.push
       name: msg.user.name
