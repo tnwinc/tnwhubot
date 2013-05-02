@@ -1,5 +1,4 @@
 [
-    "redis-brain.coffee",
     "roll.coffee",
     "tweet.coffee",
     "shipit.coffee",
@@ -15,5 +14,6 @@
     "tell.coffee",
     "tweet-content.coffee",
     "qa-servers.coffee",
-    "whoisout.coffee"
+    "whoisout.coffee",
+    "file-brain.coffee"
 ]
