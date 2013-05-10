@@ -2,7 +2,7 @@
 #   Looks up a TeamCity build profile and returns deployment info
 #
 # Dependencies:
-#   "githubot": "0.4.0"
+#   "githubot": ">=0.2.0"
 #
 # Configuration:
 #   HUBOT_TEAMCITY_USERNAME
