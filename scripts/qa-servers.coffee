@@ -12,8 +12,8 @@
 #   HUBOT_GITHUB_API
 #
 # Commands:
-#   Xhubot servers - list QA server, team and notes
-#   Xwhat's on <server> - list a single QA server, team and notes
+#   hubot servers - list QA server, team and notes
+#   what's on <server> - list a single QA server, team and notes
 #
 # Notes:
 #   None
@@ -47,6 +47,7 @@ module.exports = (robot) ->
     
   # Hubot Command: What's on <QA server name>?
   robot.hear /What(?:\x27s| is|s) on (?:.+[_])?([\w\d]+)(?:[-].+[?])?/i, (msg) ->
+    msg.send "Checking..."
     server = msg.match[1].toLowerCase()
     lookup = qaServers.toDict('name')
     
