@@ -4,8 +4,6 @@
 # All the properties aviable on the build object can be found at the properties list at the top of this file:
 # http://sourceforge.net/apps/trac/tcplugins/browser/tcWebHooks/trunk/src/main/java/webhook/teamcity/payload/format/WebHookPayloadJsonContent.java
 
-Robot = require('hubot').robot()
-
 room = process.env.HUBOT_ROOM_TO_RECEIVE_TEAM_CITY_BUILD_RESULTS
 unless room
   throw "Need a room to send build status messages to once we receive the web hook call"
