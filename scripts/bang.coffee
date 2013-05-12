@@ -16,7 +16,6 @@
 
 Bang  = require "bang"
 {split} = require "shellwords"
-Robot = require('hubot').robot()
 
 module.exports = (robot) ->
   robot.respond /bang\s+(.*)/i, (msg) ->
