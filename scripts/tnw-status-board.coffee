@@ -6,7 +6,6 @@
 # callout <msg> - displays a message or url on the status board
 
 Pusher = require "node-pusher"
-Robot = require('hubot').robot()
 
 pusher = new Pusher
   appId: process.env['PUSHER_APP_ID']
