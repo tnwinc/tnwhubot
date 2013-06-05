@@ -9,8 +9,8 @@
 #   hubot good <good thing> - Add something good that happened this sprint
 #   hubot bad <bad thing> - Add something bad that happened this sprint
 #   hubot goodlist - List all good things that happened
-#   hubot badlist - List all bad things that happened
-#   hubot gooddel - Delete all good things that happened
+#   hubot clear bad list - List all bad things that happened
+#   hubot clear good list - Delete all good things that happened
 #   hubot baddel - Delete all bad things that happened
 #
 # Author:
@@ -59,12 +59,12 @@ module.exports = (robot) ->
   robot.respond /(good) (.+?)$/i, (msg) ->
     message = "#{msg.message.user.name}: #{msg.match[2]}"
     good = goodbad.good message
-    msg.send "The sprint is thriving!"
+    msg.send "Added to retro good list"
 
   robot.respond /(bad) (.+?)$/i, (msg) ->
     message = "#{msg.message.user.name}: #{msg.match[2]}"
     bad = goodbad.bad message
-    msg.send "The sprint is festering..."
+    msg.send "Added to retro bad list"
 
   robot.respond /(goodlist)/i, (msg) ->
     if goodbad.goodlist().length > 0
@@ -84,10 +84,10 @@ module.exports = (robot) ->
     else 
       msg.send "Nothing bad happened."
 
-  robot.respond /(gooddel)/i, (msg) ->
+  robot.respond /(clear good list)/i, (msg) ->
     goodbad.gooddel()
     msg.send "Good things deleted." 
 
-  robot.respond /(baddel)/i, (msg) ->
+  robot.respond /(clear bad list)/i, (msg) ->
     goodbad.baddel()
     msg.send "Bad things deleted." 
