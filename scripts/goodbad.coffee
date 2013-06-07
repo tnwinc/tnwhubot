@@ -9,12 +9,14 @@
 #   hubot good <good thing> - Add something good that happened this sprint
 #   hubot bad <bad thing> - Add something bad that happened this sprint
 #   hubot goodlist - List all good things that happened
-#   hubot clear bad list - List all bad things that happened
-#   hubot clear good list - Delete all good things that happened
-#   hubot baddel - Delete all bad things that happened
+#   hubot badlist - List all good things that happened
+#   hubot clear badlist - List all bad things that happened
+#   hubot clear goodlist - Delete all good things that happened
+#   hubot start retro - Start retrospective and clear lists
 #
 # Author:
 #   gabeguz
+#   mcrow - minor tweaks
 
 class GoodBad
   constructor: (@robot) ->
@@ -53,6 +55,26 @@ class GoodBad
     @badcache = []
     @robot.brain.data.bad = @badcache
 
+  PrintGoodList = ->
+    if goodbad.goodlist().length > 0
+      response = ""
+      for good, num in goodbad.goodlist()
+        response += "##{good.num} - #{good.good}\n"
+      msg.send "Good List:" 
+      msg.send response
+    else 
+      msg.send "Nothing good happened."
+
+  PrintBadList = ->
+    if goodbad.badlist().length > 0
+      response = ""
+      for bad, num in goodbad.badlist()
+        response += "##{bad.num} - #{bad.bad}\n"
+      msg.send "Bad List:" 
+      msg.send response
+    else 
+      msg.send "Nothing bad happened."
+    
 module.exports = (robot) ->
   goodbad = new GoodBad robot
   
@@ -67,27 +89,24 @@ module.exports = (robot) ->
     msg.send "Added to retro bad list"
 
   robot.respond /(goodlist)/i, (msg) ->
-    if goodbad.goodlist().length > 0
-      response = ""
-      for good, num in goodbad.goodlist()
-        response += "##{good.num} - #{good.good}\n"
-      msg.send response
-    else 
-      msg.send "Nothing good happened."
+    PrintGoodList()
 
   robot.respond /(badlist)/i, (msg) ->
-    if goodbad.badlist().length > 0
-      response = ""
-      for bad, num in goodbad.badlist()
-        response += "##{bad.num} - #{bad.bad}\n"
-      msg.send response
-    else 
-      msg.send "Nothing bad happened."
+    PrintBadList()
 
-  robot.respond /(clear good list)/i, (msg) ->
+  robot.respond /(clear goodlist)/i, (msg) ->
     goodbad.gooddel()
     msg.send "Good things deleted." 
 
-  robot.respond /(clear bad list)/i, (msg) ->
+  robot.respond /(clear badlist)/i, (msg) ->
     goodbad.baddel()
     msg.send "Bad things deleted." 
+    
+  robot.respond /(start retro)/i, (msg) ->
+    msg.send "-----------  Starting Sprint Retrospective  -----------"
+    PrintGoodList()
+    PrintBadList()
+    msg.send "Clearing both lists for next sprint." 
+    goodbad.baddel()
+    goodbad.gooddel()
+
