@@ -33,11 +33,11 @@ module.exports = (robot) ->
   
   # TODO: Make dynamic
   qaServers = [
-    {name: "goby", team: "Carbon", buildTypeId: "bt3", vcsBranch: "qa_goby"}
-    {name: "grouper", team: "Carbon", buildTypeId: "bt2", vcsBranch: "qa_grouper"}
-    {name: "carp", team: "Cobalt", buildTypeId: "bt10", vcsBranch: "qa_carp"}
+    {name: "goby", team: "Carbon", buildTypeId: "bt18", vcsBranch: "qa_goby"}
+    {name: "grouper", team: "Carbon", buildTypeId: "bt14", vcsBranch: "qa_grouper"}
+    {name: "carp", team: "Cobalt", buildTypeId: "bt15", vcsBranch: "qa_carp"}
     {name: "catfish", team: "Cobalt", buildTypeId: "bt4", vcsBranch: "qa_catfish"}
-    {name: "barracuda", team: "Platinum", buildTypeId:  "bt6", vcsBranch: "qa_barracuda"}
+    {name: "barracuda", team: "Platinum", buildTypeId:  "bt9", vcsBranch: "qa_barracuda"}
   ]
 
   Array::toDict = (key) ->
