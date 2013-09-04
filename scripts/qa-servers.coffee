@@ -58,24 +58,24 @@ module.exports = (robot) ->
     if lookup[server]?
       typeId = lookup[server].buildTypeId
 
-      #Deploying mode notes
-      url = "#{scheme}://#{hostname}/httpAuth/app/rest/builds?locator=running:true&buildType=#{typeId}"
-      msg.http(url)
+      #Deployment in progress check
+      msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds?locator=running:true&buildType=#{typeId}")
         .headers(GetTCAuthHeader())
         .get() (err, res, body) ->
           result = JSON.parse(body)
-          if (result.build.running)
-            url = "#{scheme}://#{hostname}/httpAuth/app/rest/builds/id:#{result.build.href}"
-            msg.http(url)
+          msg.send "Debug1: #{result.build[0].running}"
+          if (result.build[0]?.running)
+            msg.send "Debug2: in deploying section"
+            msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds/id:#{result.build.href}")
               .headers(GetTCAuthHeader())
               .get() (err, res, body) ->
-              result = JSON.parse(body)
-              minRemaining = (result.running-info.estimatedTotalSeconds - result.running-info.elapsedSeconds) / 60
-              msg.send "#{server.charAt(0).toUpperCase() + server.slice(1)}  (#{lookup[server].team})  :::::  :repeat: Currently Deploying eta #{minRemaining}  :::::  #{result.running-info.currentStageText}"
+                result = JSON.parse(body)
+                minRemaining = (result.running-info.estimatedTotalSeconds - result.running-info.elapsedSeconds) / 60
+                msg.send "#{server.charAt(0).toUpperCase() + server.slice(1)}  (#{lookup[server].team})  :::::  :repeat: Currently Deploying eta #{minRemaining}  :::::  #{result.running-info.currentStageText}"
           else
             #----------------------------------------------
-            url = "#{scheme}://#{hostname}/httpAuth/app/rest/builds/buildType:#{typeId}"
-            msg.http(url)
+            msg.send "Debug3: in not deploying section"
+            msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds/buildType:#{typeId}")
               .headers(GetTCAuthHeader())
               .get() (err, res, body) ->
                 result = JSON.parse(body)
@@ -83,7 +83,7 @@ module.exports = (robot) ->
                   buildUser = result.triggered.user.name
                 else
                   buildUser = "VCS Triggered"
-                buildVersion = result.revisions.revision[0].version
+                buildVersion = result.revisions.revision[0]?.version
 
                 # Get sha data from GitHub
                 url = "#{gitHubApi}/repos/tnwinc/grc/branches"
