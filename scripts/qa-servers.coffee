@@ -57,49 +57,32 @@ module.exports = (robot) ->
     #Get build details from TeamCity
     if lookup[server]?
       typeId = lookup[server].buildTypeId
-
-      #Deployment in progress check
-      msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds?locator=running:true&buildType=#{typeId}")
+      url = "#{scheme}://#{hostname}/httpAuth/app/rest/builds/buildType:#{typeId}"
+      msg.http(url)
         .headers(GetTCAuthHeader())
         .get() (err, res, body) ->
           result = JSON.parse(body)
-          msg.send "Debug1: #{result.build[0].running}"
-          if (result.build[0]?.running)
-            msg.send "Debug2: in deploying section"
-            msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds/id:#{result.build.href}")
-              .headers(GetTCAuthHeader())
-              .get() (err, res, body) ->
-                result = JSON.parse(body)
-                minRemaining = (result.running-info.estimatedTotalSeconds - result.running-info.elapsedSeconds) / 60
-                msg.send "#{server.charAt(0).toUpperCase() + server.slice(1)}  (#{lookup[server].team})  :::::  :repeat: Currently Deploying eta #{minRemaining}  :::::  #{result.running-info.currentStageText}"
+          if (result.triggered.user)?
+            buildUser = result.triggered.user.name
           else
-            #----------------------------------------------
-            msg.send "Debug3: in not deploying section"
-            msg.http("#{scheme}://#{hostname}/httpAuth/app/rest/builds/buildType:#{typeId}")
-              .headers(GetTCAuthHeader())
-              .get() (err, res, body) ->
-                result = JSON.parse(body)
-                if (result.triggered.user)?
-                  buildUser = result.triggered.user.name
-                else
-                  buildUser = "VCS Triggered"
-                buildVersion = result.revisions.revision[0]?.version
+            buildUser = "VCS Triggered"
+          buildVersion = result.revisions.revision[0].version
 
-                # Get sha data from GitHub
-                url = "#{gitHubApi}/repos/tnwinc/grc/branches"
-                myBranch = ":warning: Not at branch Head - https://github.com/tnwinc/grc/commit/#{buildVersion}"
-                github.get url, (branches) ->
-                  for branch in branches
-                    if branch.commit.sha == buildVersion && branch.name != lookup[server].vcsBranch
-                      myBranch = branch.name
+          # Get sha data from GitHub
+          url = "#{gitHubApi}/repos/tnwinc/grc/branches"
+          myBranch = ":warning: Not at branch Head - https://github.com/tnwinc/grc/commit/#{buildVersion}"
+          github.get url, (branches) ->
+            for branch in branches
+              if branch.commit.sha == buildVersion && branch.name != lookup[server].vcsBranch
+                myBranch = branch.name
 
-                  # Output response
-                  result.startDate = result.startDate.replace /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})-.*$/, "$2/$3 @ $4:$5"
-                  switch result.status
-                    when "FAILURE" then result.status = ":boom: #{result.status}"
-                    when "SUCCESS" then result.status = ":thumbsup: #{result.status}"
-                    when "CANCELED" then result.status = ":thumbsdown: #{result.status}"
-                    else result.status = ":question: #{result.status}"
+            # Output response
+            result.startDate = result.startDate.replace /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})-.*$/, "$2/$3 @ $4:$5"
+            switch result.status
+              when "FAILURE" then result.status = ":boom: #{result.status}"
+              when "SUCCESS" then result.status = ":thumbsup: #{result.status}"
+              when "CANCELED" then result.status = ":thumbsdown: #{result.status}"
+              else result.status = ":question: #{result.status}"
 
-                  msg.send "#{server.charAt(0).toUpperCase() + server.slice(1)}  (#{lookup[server].team})   :::::   #{buildUser} on #{result.startDate}   :::::   #{result.status}: #{myBranch}"
+            msg.send "#{server.charAt(0).toUpperCase() + server.slice(1)}  (#{lookup[server].team})   :::::   #{buildUser} on #{result.startDate}   :::::   #{result.status}: #{myBranch}"
     else msg.send "Sorry, I don't recognize a server named #{server}..."
