@@ -37,9 +37,10 @@ module.exports = (robot) ->
     {name: "grouper", team: "Carbon", buildTypeId: "Fishes_GrouperPowershell", vcsBranch: "qa_grouper"}
     {name: "carp", team: "Cobalt", buildTypeId: "Cobalt_CarpPowershell", vcsBranch: "qa_carp"}
     {name: "catfish", team: "Cobalt", buildTypeId: "Cobalt_CatfishPowershell", vcsBranch: "qa_catfish"}
-    {name: "barracuda", team: "Platinum", buildTypeId:  "Fishes_BarracudaPowershell", vcsBranch: "qa_barracuda"}
+    {name: "barracuda", team: "Platinum", buildTypeId:  "Fishes_Barracuda_2", vcsBranch: "qa_barracuda"}
     {name: "monkfish", team: "Neon", buildTypeId:  "Fishes_MonkFish", vcsBranch: "qa_monkfish"}
     {name: "silverfish", team: "Mercury", buildTypeId:  "Mercury_Silverfish", vcsBranch: "qa_silverfish"}
+    {name: "marlin", team: "Platinum", buildTypeId:  "Fishes_Marlin_2", vcsBranch: "qa_marlin"}
   ]
 
   Array::toDict = (key) ->
