@@ -1,3 +1,6 @@
+# Archive Note
+This repo is obsolete and no longer being used. Archiving it to keep its historical value.
+
 # Hubot
 
 This is a version of GitHub's Campfire bot, hubot. He's pretty cool.
